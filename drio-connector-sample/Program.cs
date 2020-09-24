@@ -6,7 +6,7 @@ namespace drio_connector_sample
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            
         }
     }
 }
