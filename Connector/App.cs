@@ -31,6 +31,11 @@ namespace Sample
 
             await _file.WaitForFileProcessed(fileId);
 
+            var timeSeriesId = "<timeseries id or alias>";
+
+            Console.WriteLine($"Appending {fileId} to {timeSeriesId}...");
+            await _timeSeries.Append(fileId, timeSeriesId);
+
             Console.ReadLine();
         }
 
