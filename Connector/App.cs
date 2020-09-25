@@ -27,7 +27,7 @@ namespace Sample
                 fileId = await _file.Upload(timeSeriesContent);
             }
 
-            Console.WriteLine($"{fileId} uploaded. Waiting for processing read");
+            Console.WriteLine($"{fileId} uploaded. Waiting for processing ready...");
 
             await _file.WaitForFileProcessed(fileId);
 
