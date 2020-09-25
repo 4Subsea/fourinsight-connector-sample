@@ -60,11 +60,12 @@ namespace Sample.Services.Rest
             return JsonSerializer.Deserialize<TResponse>(content);
         }
 
-        public async Task Post<TRequest>(string api, TRequest content)
+        public async Task<string> Post<TRequest>(string api, TRequest content)
         {
             var request = await CreateRequest(HttpMethod.Post, api);
             request.Content = CreateStringContent(content);
             using var response = await _httpClient.SendAsync(request);
+            return await response.Content.ReadAsStringAsync();
         }
 
         private static StringContent CreateStringContent<TRequest>(TRequest content)

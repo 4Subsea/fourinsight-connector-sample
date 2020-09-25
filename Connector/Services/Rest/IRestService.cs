@@ -8,6 +8,6 @@ namespace Sample.Services.Rest
         Task<TResponse> Get<TResponse>(string api);
         Task<string> Post(string api);
         Task<TResponse> Post<TResponse>(string api);
-        Task Post<TRequest>(string api, TRequest request);
+        Task<string> Post<TRequest>(string api, TRequest request);
     }
 }
