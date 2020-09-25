@@ -28,8 +28,7 @@ namespace Sample.Features.Files
             await _blob.Upload(upload.EndpointUri, timeSeriesContent);
 
             // Commit the file
-            var commit = new { upload.FileId };
-            await _rest.Post("/api/files/commit", commit);
+            await _rest.Post("/api/files/commit", new { upload.FileId });
 
             return upload.FileId;
         }
