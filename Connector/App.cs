@@ -38,7 +38,5 @@ namespace Sample
 
             Console.ReadLine();
         }
-
-
     }
 }
