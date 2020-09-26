@@ -23,8 +23,9 @@ namespace Sample
         {
             var timeSeriesId = "<timeseries id>";
 
-            //await AddDataToTimeSeries(timeSeriesId);
-            await DownloadTimeSeriesData(timeSeriesId);
+            // await AddDataToTimeSeries(timeSeriesId);
+            // await DownloadTimeSeriesData(timeSeriesId);
+            // await DownloadTimeSeriesRawData(timeSeriesId);
         }
 
         /// <summary>
