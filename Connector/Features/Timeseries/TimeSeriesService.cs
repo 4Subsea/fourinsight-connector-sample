@@ -32,21 +32,46 @@ namespace Sample.Features.TimeSeries
             });
         }
 
-        public IAsyncEnumerable<string> GetData(string timeSeriesId, DateTimeOffset start, DateTimeOffset end)
+        public IAsyncEnumerable<Sample> GetData(string timeSeriesId, DateTimeOffset start, DateTimeOffset end)
         {
             return GetData(timeSeriesId, start.ToNanoSecondsSinceEpoch(), end.ToNanoSecondsSinceEpoch());
         }
 
-        public async IAsyncEnumerable<string> GetData(string timeSeriesId, long start, long end)
+        public async IAsyncEnumerable<Sample> GetData(string timeSeriesId, long start, long end)
         {
+            var dictionary = new Dictionary<long, Sample>();
             var dl = await GetTimeSeriesDataDays(timeSeriesId, start, end);
+
             foreach (var file in dl.Files.OrderBy(f => f.Index))
             {
                 foreach (var chunk in file.Chunks)
                 {
-                    await using var data = await _blob.Download(chunk.EndpointUri);
+                    await using var data = await _blob.Download(chunk.EndpointUri); 
+                    var samples = SampleReader.Read(data);
+                    await foreach (var sample in samples)
+                    {
+                        dictionary[sample.Timestamp] = sample;
+                    }
+                }
+            }
+
+            foreach (var sample in dictionary.Values)
+            {
+                yield return sample;
+            }
+        }
+
+        public async IAsyncEnumerable<string> GetRawData(string timeSeriesId, long start, long end)
+        {
+            var dl = await GetTimeSeriesDataDays(timeSeriesId, start, end);
+
+            foreach (var file in dl.Files.OrderBy(f => f.Index))
+            {
+                foreach (var chunk in file.Chunks)
+                {
+                    await using var data = await _blob.Download(chunk.EndpointUri); 
                     using var reader = new StreamReader(data, Encoding.UTF8);
-                    while (!reader.EndOfStream) 
+                    while (!reader.EndOfStream)
                         yield return await reader.ReadLineAsync();
                 }
             }
