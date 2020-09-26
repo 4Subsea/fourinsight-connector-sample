@@ -8,5 +8,6 @@ namespace Sample.Services.Storage
     {
         Task Upload(Uri endpoint, string content);
         Task Upload(Uri endpoint, Stream content);
+        Task<Stream> Download(Uri endpoint);
     }
 }

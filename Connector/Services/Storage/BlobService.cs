@@ -19,5 +19,11 @@ namespace Sample.Services.Storage
             var blob = new BlobClient(endpoint);
             await blob.UploadAsync(content);
         }
+
+        public async Task<Stream> Download(Uri endpoint)
+        {
+            var blob = new BlobClient(endpoint);
+            return await blob.OpenReadAsync();
+        }
     }
 }
