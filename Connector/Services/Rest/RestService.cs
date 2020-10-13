@@ -35,8 +35,7 @@ namespace Sample.Services.Rest
         public async Task<string> Get(string api)
         {
             var request = await CreateRequest(HttpMethod.Get, api);
-            using var response = await _httpClient.SendAsync(request);
-            return await response.Content.ReadAsStringAsync();
+            return await Send(request);
         }
 
         public async Task<TResponse> Get<TResponse>(string api)
@@ -48,15 +47,13 @@ namespace Sample.Services.Rest
         public async Task<string> Post(string api)
         {
             var request = await CreateRequest(HttpMethod.Post, api);
-            using var response = await _httpClient.SendAsync(request);
-            return await response.Content.ReadAsStringAsync();
+            return await Send(request);
         }
 
         public async Task<TResponse> Post<TResponse>(string api)
         {
             var request = await CreateRequest(HttpMethod.Post, api);
-            using var response = await _httpClient.SendAsync(request);
-            var content = await response.Content.ReadAsStringAsync();
+            var content = await Send(request);
             return JsonSerializer.Deserialize<TResponse>(content);
         }
 
@@ -64,7 +61,13 @@ namespace Sample.Services.Rest
         {
             var request = await CreateRequest(HttpMethod.Post, api);
             request.Content = CreateStringContent(content);
+            return await Send(request);
+        }
+
+        private async Task<string> Send(HttpRequestMessage request)
+        {
             using var response = await _httpClient.SendAsync(request);
+            response.EnsureSuccessStatusCode();
             return await response.Content.ReadAsStringAsync();
         }
 
